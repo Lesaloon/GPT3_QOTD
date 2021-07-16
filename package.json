@@ -1,0 +1,25 @@
+{
+  "name": "gpt3_qotd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lesaloon/GTP3_QOTD.git"
+  },
+  "author": "Lesaloon",
+  "license": "SEE LICENSE IN README.md",
+  "bugs": {
+    "url": "https://github.com/Lesaloon/GTP3_QOTD/issues"
+  },
+  "homepage": "https://github.com/Lesaloon/GTP3_QOTD#readme",
+  "dependencies": {
+    "bad-words": "^3.0.4",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "ffmpeg-static": "^4.4.0"
+  }
+}
