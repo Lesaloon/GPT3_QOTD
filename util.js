@@ -1,19 +1,19 @@
 const Emojis = {
-    TIMER: "⏲",
-    PING_PONG: "🏓",
-    DANGER: "❗❗",
-    MUSIC: "🎶",
-    SEARCH: "🔎",
-    SUCCESS: "👍",
-    SAD: "😔",
-    PLAY: "▶️",
-    PAUSE: "⏸️",
-    WAVE: "👋",
-    REPEAT: "🔄",
-    SINGLE_REPEAT: "🔂",
-    CHECK: "✅",
-    CROSS: "❌",
-    NOTEPAD: "🗒"
+    TIMER: 'timer:',
+    PING_PONG: 'ping_pong:',
+    DANGER: 'exclamation:',
+    MUSIC: '🎶',
+    SEARCH: '🔍',
+    SUCCESS: '👍',
+    SAD: 'sad:',
+    PLAY: 'play:',
+    PAUSE: 'pause:',
+    WAVE: 'wave:',
+    REPEAT: 'repate:',
+    SINGLE_REPEAT: 'repate_one:',
+    CHECK: '✅',
+    NO: '⛔:',
+    NOTEPAD: '🗒️'
 };
 
 const Colors = {
@@ -31,6 +31,6 @@ const Colors = {
 };
 
 module.exports =  {
-    Emojis: Colors,
+    Emojis: Emojis,
     Colors: Colors
 }
