@@ -5,7 +5,7 @@
 
 All Rights Reserved
 
-Copyright (c) 2021 Lesaloon
+Copyright (c) 2021 GTP3_QOTD
 
 Created by Lesaloon
 
