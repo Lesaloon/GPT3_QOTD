@@ -8,6 +8,10 @@ const Filter = require('bad-words'),
 filter = new Filter();
 const util = require("./util");
 
+const OpenAI = require('openai-api');
+
+const openai = new OpenAI(process.env.OPENAI_API_KEY);
+
 client.login(process.env.TOKEN);
 
 client.on('message', async message => {
@@ -42,8 +46,9 @@ client.on('message', async message => {
 			.setTimestamp()
 			.addField("The Question:", filter.clean(message.content))
 			.addField("Inapropriate Question ?", 
-			"If you think the question above is inappropriate (politics / controvertial subject / bad word / nsfw ) or could provoke an inappropriate response please refer immediately to an administrator");
-			(await message.channel.send(embed)).react(util.Emojis.CHECK);
+			"If you think the question above is inappropriate (politics / controvertial subject / bad word / nsfw ) or could provoke an inappropriate response please refer immediately to an administrator",
+			true);
+			message.channel.send(embed).react(util.Emojis.CHECK);
 
 		} else {
 			const embed = new MessageEmbed()
@@ -56,12 +61,11 @@ client.on('message', async message => {
 			.setAuthor(client.user.username, client.user.avatarURL())
 			.setFooter("Powered by Open IA GPT-3");
 			try {
-				message.author.dmChannel.send(`<@${message.author.id}>`,embed);
+				message.author.DMChannel.send(`<@${message.author.id}>`,embed);
 			} catch (error) {
-				console.log("Too long of a question",error);
+				console.log("Too long of a question");
 			}
 		}
-		
 		
 		message.delete()
 	}
@@ -72,36 +76,63 @@ client.on('message', async message => {
 function AskRoutine(guild) {
 	console.log(Math.round(process.uptime()) + "s : routining on guilds named:", guild.name);
 
-	const channel = guild.channels.cache.find( channel => channel.name == "gpt-question-proposition" )
+	const channelP = guild.channels.cache.find( channel => channel.name == "gpt-question-proposition" )
 
-	channel.messages.fetch().then(messages => {
-		getHighestReactionAmount(messages, util.Emojis.CHECK);
+	
+	channelP.messages.fetch().then(messages => {
+		const message = getHighestReactionAmount(messages, util.Emojis.CHECK); // get the message w/ the most upvote
+		console.log(message.embeds[0]);
+		//message.react("👍");
+		
+		
+
+		// ask GTP3
+
+		// send the message in the gtp3 responce chanel
+		const channelA = guild.channels.cache.find( channel => channel.name == "gpt-answer" )
+		
+		const embed = new MessageEmbed()
+		// Set the title of the field
+		.setTitle('Responce time')
+		// Set the color of the embed
+		.setColor(util.Colors.BLURPLE)
+		// Set the main content of the embed
+		.setDescription(`This is the responce of GTP-3 on the question of : ${message.embeds[0].description.split(": ")[1]}`)
+		.addField("Question: ", `${message.embeds[0].fields[0].value}`)
+		.addField("Anser from GTP-3: ", `${GTP3A}`)
+		.setAuthor(client.user.username)
+		.setFooter("Powered by Open IA GPT-3");
+
+		channelA.send(embed);
+
 	})
-	// get the message w/ the most upvote
-	// delet it
-	// ask GTP3
-	// send the message in the gtp3 responce chanel
+	
+	
+
+
+	// delete all the msg in the chanel
 }
 
 function getHighestReactionAmount(messages, reaction) {
-	let TopReaction = 0;
 	let TopMsg;
 	messages.map( message => {
-		if (TopMsg == null ) {
+		if (message.reactions == undefined ) return
+		if (TopMsg == undefined ) {
 			TopMsg = message;
-			TopReaction = message.reactions.cache.first().count;
+			return
+		}
+		if (TopMsg == null) {
+			TopMsg = message;
 			return
 		}
 
-		if(TopReaction < message.reactions.cache.first().count ) { 
+		if(TopMsg.reactions.cache.first().count < message.reactions.cache.first().count ) { 
 			TopMsg = message;
-			TopReaction = message.reactions.cache.first().count;
 			return
 		}
 	
 	});
-
-	return { TopReaction, TopMsg }
+	return TopMsg
 }
 
 setInterval(() => {
