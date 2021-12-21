@@ -10,7 +10,8 @@ const util = require("./util");
 
 const OpenAI = require('openai-api');
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
-
+const GTPQuestionChanelName = "gpt-question-proposition"
+const GTPAnwserchanelName = "gpt-answer" 
 TESTMODE = false
 
 client.login(process.env.TOKEN);
@@ -22,7 +23,7 @@ client.on('message', async message => {
 	// if the message is from a bot we ignore it
 	if (message.author.bot == true ) return;
 
-	if (message.channel.name == "gpt-question-proposition") {
+	if (message.channel.name == GTPQuestionChanelName) {
 		
 		//?ask command hadeling
 		if (message.content == process.env.PREFIX+"ask" && message.member.hasPermission("ADMINISTRATOR")) {
@@ -74,7 +75,7 @@ client.on('message', async message => {
 function AskRoutine(guild) {
 	console.log(Math.round(process.uptime()/60) + "min : routining on guilds named:", guild.name);
 
-	const channelP = guild.channels.cache.find( channel => channel.name == "gpt-question-proposition" )
+	const channelP = guild.channels.cache.find( channel => channel.name == GTPQuestionChanelName )
 
 	
 	channelP.messages.fetch().then(messages => {
@@ -189,7 +190,7 @@ A:`,
 				if (output_label >= 2 ) {
 					// not safe so redo that the resonce was not displayable or some other bullshit so the user dont suspect the ia to use bad language
 				
-					const channelA = guild.channels.cache.find( channel => channel.name == "gpt-answer" )
+					const channelA = guild.channels.cache.find( channel => channel.name == GTPAnwserchanelName )
 			
 					const embed = new MessageEmbed()
 					// Set the title of the field
@@ -248,7 +249,7 @@ true)
 
 
 function sendResponce( guild, message, gptResponse ) {
-	const channelA = guild.channels.cache.find( channel => channel.name == "gpt-answer" )
+	const channelA = guild.channels.cache.find( channel => channel.name == GTPAnwserchanelName )
 			
 	const embed = new MessageEmbed()
 	// Set the title of the field
